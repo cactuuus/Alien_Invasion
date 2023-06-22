@@ -2,6 +2,7 @@
 import sys
 import pygame
 
+from time import sleep
 from bullet import Bullet
 from alien import Alien
 
@@ -144,9 +145,30 @@ def change_fleet_direction(settings, aliens):
         alien.rect.y += settings.fleet_drop_speed
     settings.fleet_direction *= -1
 
+
+def ship_hit(settings, stats, screen, ship, aliens, bullets):
+    """Responds to the ship being hit by an alien."""
+    # Decrements ships left.
+    stats.ships_left -= 1
     
-def update_aliens(settings, aliens):
+    # Empties the lists of aliens and bullets.
+    aliens.empty()
+    bullets.empty()
+
+    # Creates a new fleet and centers the ship.
+    create_fleet(settings, screen, ship, aliens)
+    ship.center_ship()
+
+    # Pause
+    sleep(0.5)
+
+    
+def update_aliens(settings, stats, screen, ship, aliens, bullets):
     """Checks if the fleet is at an edge, then updates the position 
     of all aliens in the fleet."""
     check_fleet_edges(settings, aliens)
     aliens.update()
+
+    # Looks for alien-ship collisions.
+    if pygame.sprite.spritecollideany(ship, aliens):
+        ship_hit(settings, stats, screen, ship, aliens, bullets)
