@@ -35,7 +35,8 @@ def check_keyup_events(event, ship):
         ship.moving_down = False
 
 
-def check_events(settings, screen, ship, bullets):
+def check_events(settings, screen, stats, play_button, ship, aliens,
+                 bullets):
     """Responds to keypresses and mouse events."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -46,6 +47,30 @@ def check_events(settings, screen, ship, bullets):
         
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(settings, screen, stats, play_button, ship,
+                              aliens, bullets, mouse_x, mouse_y)
+
+
+def check_play_button(settings, screen, stats, play_button, ship, aliens,
+                      bullets, mouse_x, mouse_y):
+    """Starts a new game whem the player clicks Play."""
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        # Resets game statistics.
+        stats.reset_stats()
+        stats.game_active = True
+
+        # Empties the list of aliens and bullets.
+        aliens.empty()
+        bullets.empty()
+
+        # Creates a new fleet and centers the ship.
+        create_fleet(settings, screen, ship, aliens)
+        ship.center_ship()
+
+
 
 
 def update_screen(settings, screen, stats, ship, bullets, aliens, play_button):
@@ -152,9 +177,10 @@ def change_fleet_direction(settings, aliens):
 
 def ship_hit(settings, stats, screen, ship, aliens, bullets):
     """Responds to the ship being hit by an alien."""
+    # Decrements ships left.
+    stats.ships_left -= 1
     if stats.ships_left > 0:
-        # Decrements ships left.
-        stats.ships_left -= 1
+        print(f"ships left: {stats.ships_left}")
         
         # Empties the lists of aliens and bullets.
         aliens.empty()
