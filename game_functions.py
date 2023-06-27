@@ -6,7 +6,8 @@ from time import sleep
 from bullet import Bullet
 from alien import Alien
 
-def check_keydown_events(event, settings, screen, ship, bullets):
+def check_keydown_events(event, settings, screen, stats, ship, aliens,
+                         bullets):
     """Responds to keypresses."""
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
@@ -21,6 +22,9 @@ def check_keydown_events(event, settings, screen, ship, bullets):
     # Exits the game if 'q' is pressed.
     if event.key == pygame.K_q:
         sys.exit()
+    # Starts the ganme if 'p' is pressed.
+    if event.key == pygame.K_p:
+        start_game(settings, screen, stats, ship, aliens, bullets)
 
 
 def check_keyup_events(event, ship):
@@ -43,7 +47,8 @@ def check_events(settings, screen, stats, play_button, ship, aliens,
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, settings, screen, ship, bullets)
+            check_keydown_events(event, settings, screen, stats, ship, aliens,
+                                 bullets)
         
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
@@ -58,7 +63,12 @@ def check_play_button(settings, screen, stats, play_button, ship, aliens,
                       bullets, mouse_x, mouse_y):
     """Starts a new game whem the player clicks Play."""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
-    if button_clicked and not stats.game_active:
+    if button_clicked:
+        start_game(settings, screen, stats, ship, aliens, bullets)
+
+def start_game(settings, screen, stats, ship, aliens, bullets):
+    """Starts a new game, if the game is not currently active."""
+    if not stats.game_active:
         # Hides the mouse cursor.
         pygame.mouse.set_visible(False)
 
@@ -73,8 +83,6 @@ def check_play_button(settings, screen, stats, play_button, ship, aliens,
         # Creates a new fleet and centers the ship.
         create_fleet(settings, screen, ship, aliens)
         ship.center_ship()
-
-
 
 
 def update_screen(settings, screen, stats, ship, bullets, aliens, play_button):
