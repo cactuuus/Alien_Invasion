@@ -88,7 +88,8 @@ def start_game(settings, screen, stats, ship, aliens, bullets):
         ship.center_ship()
 
 
-def update_screen(settings, screen, stats, ship, bullets, aliens, play_button):
+def update_screen(settings, screen, stats, sb, ship, bullets, aliens,
+                  play_button):
     """Updates images on the screen and flips to the new screen."""
     # Redraw the screen during each pass though the loop.
     screen.fill(settings.bg_color)
@@ -97,6 +98,9 @@ def update_screen(settings, screen, stats, ship, bullets, aliens, play_button):
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+
+    # Draws the score information.
+    sb.show_score()
 
     # Draws the play button if the game is inactive.
     if not stats.game_active:
@@ -113,7 +117,7 @@ def fire_bullet(settings, screen, ship, bullets):
         bullets.add(new_bullet)
 
 
-def update_bullets(settings, screen, ship, aliens, bullets):
+def update_bullets(settings, screen, stats, sb, ship, aliens, bullets):
     """Updates position of bullets and gets rid of old bullets."""
     # Updates bullet position.
     bullets.update()
@@ -123,12 +127,19 @@ def update_bullets(settings, screen, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
     
-    check_bullet_alien_collisions(settings, screen, ship, aliens, bullets)
+    check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens,
+                                  bullets)
 
 
-def check_bullet_alien_collisions(settings, screen, ship, aliens, bullets):
+def check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens,
+                                  bullets):
     """Responds to bullet-alien collision"""
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    if collisions:
+        for aliens in collisions.values():
+            stats.score += settings.alien_points * len(aliens)
+            sb.prep_score()
 
     if len(aliens) == 0:
         # Destroys existing bullets, speeds up game and makes new fleet.
