@@ -202,7 +202,7 @@ def change_fleet_direction(settings, aliens):
     settings.fleet_direction *= -1
 
 
-def ship_hit(settings, stats, screen, ship, aliens, bullets):
+def ship_hit(settings, stats, screen, sb, ship, aliens, bullets):
     """Responds to the ship being hit by an alien."""
     # Decrements ships left.
     stats.ships_left -= 1
@@ -219,22 +219,26 @@ def ship_hit(settings, stats, screen, ship, aliens, bullets):
         # Pause
         sleep(0.5)
     else:
+        # Updates high score if needed.
+        check_high_score(stats, sb)
+
         # Stops the games and displays the mouse cursor.
         stats.game_active = False
+
         pygame.mouse.set_visible(True) 
 
 
-def check_aliens_bottom(settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(settings, stats, screen, sb, ship, aliens, bullets):
     """Checks if any aliens have reached the bottom of the screen."""
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # Treats this the same as if the ship got hit.
-            ship_hit(settings, stats, screen, ship, aliens, bullets)
+            ship_hit(settings, stats, screen, sb, ship, aliens, bullets)
             break
 
     
-def update_aliens(settings, stats, screen, ship, aliens, bullets):
+def update_aliens(settings, stats, screen, sb, ship, aliens, bullets):
     """Checks if the fleet is at an edge, then updates the position 
     of all aliens in the fleet."""
     check_fleet_edges(settings, aliens)
@@ -242,7 +246,14 @@ def update_aliens(settings, stats, screen, ship, aliens, bullets):
 
     # Looks for alien-ship collisions.
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(settings, stats, screen, ship, aliens, bullets)
+        ship_hit(settings, stats, screen, sb, ship, aliens, bullets)
 
     # Looks for aliens hitting the bottom of the screen.
-    check_aliens_bottom(settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(settings, stats, screen, sb, ship, aliens, bullets)
+
+
+def check_high_score(stats, sb):
+    """Checks to see if there's a new high score."""
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
