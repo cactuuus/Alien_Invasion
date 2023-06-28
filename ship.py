@@ -1,11 +1,13 @@
 """Dictates the player's ship appearance and behaviour."""
 import pygame
+from pygame.sprite import Sprite
 
-class Ship():
+class Ship(Sprite):
     """A class representing the player's ship."""
 
     def __init__(self, screen, settings):
         """Initialises the ship and set its starting position."""
+        super().__init__()
         self.screen = screen
         self.settings = settings
         
@@ -35,10 +37,12 @@ class Ship():
             self.center["x"] += self.settings.ship_speed_factor
         if self.moving_left and self.rect.left > 0:
             self.center["x"] -= self.settings.ship_speed_factor
-        if self.moving_up and self.rect.top > 0:
-            self.center["y"] -= self.settings.ship_speed_factor
-        if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
-            self.center["y"] += self.settings.ship_speed_factor
+            
+        # Removed the ability to go up and down
+        # if self.moving_up and self.rect.top > 0:
+        #     self.center["y"] -= self.settings.ship_speed_factor
+        # if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
+        #     self.center["y"] += self.settings.ship_speed_factor
 
         # Update rect object based on the self.center value.
         self.rect.centerx = self.center["x"]

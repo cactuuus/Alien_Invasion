@@ -12,19 +12,19 @@ class Settings():
         self.bg_image = pygame.image.load("images/background.bmp")
 
         # Ship settings
-        self.ship_limit = 3
+        self.ship_limit = 2
 
         # Bullet settings
         self.bullet_width = 5
         self.bullet_height = 15
         self.bullet_color = (242, 213, 24) # Yellow
-        self.bullets_allowed = 3
+        self.bullets_allowed = 4
 
         # Alien settings
         self.fleet_drop_speed = 10
 
         # How quickly the game speeds up & score per alien increase
-        self.speedup_scale = 1.1
+        self.speedup_scale = 1.3
         self.score_scale = 1.5
 
         # Initialises dynamic settings of the game

@@ -13,10 +13,13 @@ def check_keydown_events(event, settings, screen, stats, sb, ship, aliens,
         ship.moving_right = True
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
-    if event.key == pygame.K_UP:
-        ship.moving_up = True
-    elif event.key == pygame.K_DOWN:
-        ship.moving_down = True
+
+    # Removed the ability to go up and down.
+    # if event.key == pygame.K_UP:
+    #     ship.moving_up = True
+    # elif event.key == pygame.K_DOWN:
+    #     ship.moving_down = True
+
     if event.key == pygame.K_SPACE:
         fire_bullet(settings, screen, ship, bullets)
     # Exits the game if 'q' is pressed.
@@ -83,6 +86,7 @@ def start_game(settings, screen, stats, sb, ship, aliens, bullets):
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
+        sb.prep_ships()
 
         # Empties the list of aliens and bullets.
         aliens.empty()
@@ -215,9 +219,11 @@ def change_fleet_direction(settings, aliens):
 def ship_hit(settings, stats, screen, sb, ship, aliens, bullets):
     """Responds to the ship being hit by an alien."""
     # Decrements ships left.
-    stats.ships_left -= 1
     if stats.ships_left > 0:
-        
+        # Updates scoreboard.
+        stats.ships_left -= 1
+        sb.prep_ships()
+
         # Empties the lists of aliens and bullets.
         aliens.empty()
         bullets.empty()

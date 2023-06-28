@@ -1,7 +1,7 @@
 import pygame
 import game_functions as gf
-
 from pygame.sprite import Group
+
 from settings import Settings
 from ship import Ship
 from button import Button
