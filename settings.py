@@ -1,4 +1,5 @@
 """The game's settings."""
+import pygame
 
 class Settings():
     """A class used to handle all settings for the game."""
@@ -8,15 +9,15 @@ class Settings():
         # Screen settings
         self.screen_width = 1200
         self.screen_height = 800
-        self.bg_color = (136, 215, 247) # Sky blue
+        self.bg_image = pygame.image.load("images/background.bmp")
 
         # Ship settings
         self.ship_limit = 3
 
         # Bullet settings
-        self.bullet_width = 3
+        self.bullet_width = 5
         self.bullet_height = 15
-        self.bullet_color = (60, 60, 60) # Dark gray
+        self.bullet_color = (242, 213, 24) # Yellow
         self.bullets_allowed = 3
 
         # Alien settings
@@ -48,4 +49,3 @@ class Settings():
         self.alien_speed_factor *= self.speedup_scale
 
         self.alien_points = int(self.alien_points * self.score_scale)
-        print(self.alien_points)
