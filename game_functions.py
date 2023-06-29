@@ -121,6 +121,9 @@ def update_screen(settings, screen, stats, sb, ship, bullets, aliens,
 
     # Makes the most recently drawn screen visible.
     pygame.display.flip()
+    
+    # Runs the game at 120 fps.
+    settings.clock.tick_busy_loop(settings.fps_target)
 
 def fire_bullet(settings, screen, ship, bullets):
     """Fire a bullet if the limit is not yet reached."""

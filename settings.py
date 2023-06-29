@@ -6,6 +6,10 @@ class Settings():
 
     def __init__(self):
         """Initialises the game's settings."""
+        # Initialises clock.
+        self.clock = pygame.time.Clock()
+        self.fps_target = 120
+
         # High score file path.
         self.high_score_filename = "high_score.txt"
 
@@ -37,10 +41,10 @@ class Settings():
 
     def initialise_dynamic_settings(self):
         """Initialises settings and alien points values."""
-        self.ship_speed_factor = 1.5
-        self.bullet_speed_factor = 2
-        self.alien_speed_factor = 0.7
-        self.alien_bullet_speed_factor = 1
+        self.ship_speed_factor = 3
+        self.bullet_speed_factor = 4
+        self.alien_speed_factor = 1.5
+        self.alien_bullet_speed_factor = 2
         # The higher the number, the higher the chance of aliens to fire
         self.alien_aggressiveness = 3
 
