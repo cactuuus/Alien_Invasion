@@ -1,15 +1,17 @@
 """Dictates the player's ship appearance and behaviour."""
 import pygame
 from pygame.sprite import Sprite
+from time import sleep
 
 class Ship(Sprite):
     """A class representing the player's ship."""
 
-    def __init__(self, screen, settings):
+    def __init__(self, screen, settings, audio=None):
         """Initialises the ship and set its starting position."""
         super().__init__()
         self.screen = screen
         self.settings = settings
+        self.audio = audio
         
         # Loads the image and gets its rect.
         self.image = pygame.image.load("images/player_ship.bmp")
@@ -29,6 +31,11 @@ class Ship(Sprite):
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+
+        # Exploding animation.
+        self.exploding = False
+        self.explosion = []
+        self.load_explosion_sprites()
 
     def update(self):
         """Updates the ship's position based on the movement flag."""
@@ -57,3 +64,16 @@ class Ship(Sprite):
         self.center["x"] = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom
         self.center["y"] = self.rect.centery
+    
+    def cannon_sound(self):
+        """Plays the cannon sound effect."""
+        self.audio.play(self.audio.ship_cannon)
+
+    def explode(self):
+        """Animation of the ship exploding."""
+        self.audio.play(self.audio.ship_hit)
+
+    def load_explosion_sprites(self):
+         for frame_no in range(0, 24):
+            self.explosion.append(
+                pygame.image.load(f"images/ship_hit/{frame_no}.png"))

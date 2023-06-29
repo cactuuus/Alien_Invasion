@@ -7,6 +7,7 @@ from ship import Ship
 from button import Button
 from game_stats import GameStats
 from scoreboard import Scoreboard
+from audio import Audio
 
 def run_game():
     # Initialises the game and create a screen object.
@@ -23,26 +24,29 @@ def run_game():
     stats = GameStats(settings)
     sb = Scoreboard(settings, screen, stats)
 
+    # Loads audio effects and music
+    audio = Audio()
+
     # Creates a ship, a group of bullets and a group of aliens.
-    ship = Ship(screen, settings)
+    ship = Ship(screen, settings, audio)
     bullets = Group()
     aliens = Group()
     alien_bullets = Group()
 
 
     # Creates the fleet of aliens.
-    gf.create_fleet(settings, screen, ship, aliens)
+    gf.create_fleet(settings, screen, audio, ship, aliens)
 
     # Starts the main loop for the game.
     while True:
-        gf.check_events(settings, screen, stats, sb, play_button, ship,
+        gf.check_events(settings, screen, stats, audio, sb, play_button, ship,
                         aliens, bullets)
 
         if stats.game_active:
             ship.update() 
-            gf.update_bullets(settings, screen, stats, sb, ship, aliens,
+            gf.update_bullets(settings, screen, stats, audio, sb, ship, aliens,
                               bullets, alien_bullets)
-            gf.update_aliens(settings, stats, screen, sb, ship, aliens,
+            gf.update_aliens(settings, stats, screen, audio, sb, ship, aliens,
                              bullets, alien_bullets)
 
         gf.update_screen(settings, screen, stats, sb, ship, bullets, aliens,

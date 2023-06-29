@@ -6,11 +6,12 @@ from alien_bullet import AlienBullet
 class Alien(Sprite):
     """A class to represent a single alien in the fleet."""
 
-    def __init__(self, settings, screen):
+    def __init__(self, settings, screen, audio=None):
         """Initialises the alien and sets its starting position."""
         super().__init__()
         self.screen = screen
         self.settings = settings
+        self.audio = audio
 
         # Loads the alien image and set its rect attribute.
         self.image = pygame.image.load("images/alien.bmp")
@@ -22,6 +23,10 @@ class Alien(Sprite):
 
         # Stores the alien's exact position.
         self.x = float(self.rect.x)
+
+    def explode(self):
+        """Animation of the alien exploding."""
+        self.audio.play(self.audio.alien_hit)
 
     def blitme(self):
         """Draws the alien at its current location."""
@@ -44,6 +49,7 @@ class Alien(Sprite):
     def try_shooting(self) -> AlienBullet:
         """Attempt at firing a bullet."""
         if random.randrange(10000)  <= self.settings.alien_aggressiveness:
+            self.audio.play(self.audio.alien_laser)
             return AlienBullet(self.settings, self.screen, self)
         else:
             return None

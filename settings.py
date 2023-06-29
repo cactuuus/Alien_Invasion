@@ -1,4 +1,3 @@
-"""The game's settings."""
 import pygame
 
 class Settings():
@@ -34,7 +33,7 @@ class Settings():
         # How quickly the game speeds up & score per alien increase
         self.speedup_scale = 1.2
         self.score_scale = 1.5
-        self.aggressiveness_scale = 1.1
+        self.aggressiveness_scale = 1.3
 
         # Initialises dynamic settings of the game
         self.initialise_dynamic_settings()
