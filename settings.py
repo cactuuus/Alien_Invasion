@@ -25,7 +25,7 @@ class Settings():
         self.bullet_width = 5
         self.bullet_height = 15
         self.bullet_color = (242, 213, 24) # Yellow
-        self.bullets_allowed = 4
+        self.bullets_allowed = 6
         self.alien_bullet_color = (74, 201, 42) # Lime green
 
         # Alien settings
@@ -41,10 +41,10 @@ class Settings():
 
     def initialise_dynamic_settings(self):
         """Initialises settings and alien points values."""
-        self.ship_speed_factor = 3
-        self.bullet_speed_factor = 4
-        self.alien_speed_factor = 1.5
-        self.alien_bullet_speed_factor = 2
+        self.ship_speed_factor = 2
+        self.bullet_speed_factor = 3
+        self.alien_speed_factor = 1.3
+        self.alien_bullet_speed_factor = 1
         # The higher the number, the higher the chance of aliens to fire
         self.alien_aggressiveness = 3
 

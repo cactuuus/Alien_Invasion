@@ -122,8 +122,9 @@ def update_screen(settings, screen, stats, sb, ship, bullets, aliens,
     # Makes the most recently drawn screen visible.
     pygame.display.flip()
     
-    # Runs the game at 120 fps.
+    # Runs the game at the set fps.
     settings.clock.tick_busy_loop(settings.fps_target)
+    print(settings.clock.get_fps())
 
 def fire_bullet(settings, screen, ship, bullets):
     """Fire a bullet if the limit is not yet reached."""
@@ -150,6 +151,16 @@ def update_bullets(settings, screen, stats, sb, ship, aliens, bullets,
     
     check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens,
                                   bullets)
+    check_bullet_ship_collisions(settings, screen, stats, sb, ship, aliens,
+                                 bullets, alien_bullets)
+
+
+def check_bullet_ship_collisions(settings, screen, stats, sb, ship, aliens,
+                                 bullets, alien_bullets):
+    """Responds to alien_bullet-ship collision"""
+    if pygame.sprite.spritecollideany(ship, alien_bullets):
+        ship_hit(settings, stats, screen, sb, ship, aliens, bullets,
+                 alien_bullets)
 
 
 def check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens,
@@ -234,7 +245,8 @@ def change_fleet_direction(settings, aliens):
     settings.fleet_direction *= -1
 
 
-def ship_hit(settings, stats, screen, sb, ship, aliens, bullets):
+def ship_hit(settings, stats, screen, sb, ship, aliens, bullets,
+             alien_bullets):
     """Responds to the ship being hit by an alien."""
     # Decrements ships left.
     if stats.ships_left > 0:
@@ -245,6 +257,7 @@ def ship_hit(settings, stats, screen, sb, ship, aliens, bullets):
         # Empties the lists of aliens and bullets.
         aliens.empty()
         bullets.empty()
+        alien_bullets.empty()
 
         # Creates a new fleet and centers the ship.
         create_fleet(settings, screen, ship, aliens)
@@ -262,13 +275,15 @@ def ship_hit(settings, stats, screen, sb, ship, aliens, bullets):
         pygame.mouse.set_visible(True) 
 
 
-def check_aliens_bottom(settings, stats, screen, sb, ship, aliens, bullets):
+def check_aliens_bottom(settings, stats, screen, sb, ship, aliens, bullets,
+                        alien_bullets):
     """Checks if any aliens have reached the bottom of the screen."""
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # Treats this the same as if the ship got hit.
-            ship_hit(settings, stats, screen, sb, ship, aliens, bullets)
+            ship_hit(settings, stats, screen, sb, ship, aliens, bullets,
+                     alien_bullets)
             break
 
     
@@ -287,10 +302,12 @@ def update_aliens(settings, stats, screen, sb, ship, aliens, bullets,
 
     # Looks for alien-ship collisions.
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(settings, stats, screen, sb, ship, aliens, bullets)
+        ship_hit(settings, stats, screen, sb, ship, aliens, bullets,
+                 alien_bullets)
 
     # Looks for aliens hitting the bottom of the screen.
-    check_aliens_bottom(settings, stats, screen, sb, ship, aliens, bullets)
+    check_aliens_bottom(settings, stats, screen, sb, ship, aliens, bullets,
+                        alien_bullets)
 
 
 def check_high_score(stats, sb):
