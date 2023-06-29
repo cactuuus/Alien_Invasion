@@ -22,13 +22,15 @@ class Settings():
         self.bullet_height = 15
         self.bullet_color = (242, 213, 24) # Yellow
         self.bullets_allowed = 4
+        self.alien_bullet_color = (74, 201, 42) # Lime green
 
         # Alien settings
         self.fleet_drop_speed = 10
 
         # How quickly the game speeds up & score per alien increase
-        self.speedup_scale = 1.1
+        self.speedup_scale = 1.2
         self.score_scale = 1.5
+        self.aggressiveness_scale = 1.1
 
         # Initialises dynamic settings of the game
         self.initialise_dynamic_settings()
@@ -38,6 +40,9 @@ class Settings():
         self.ship_speed_factor = 1.5
         self.bullet_speed_factor = 2
         self.alien_speed_factor = 0.7
+        self.alien_bullet_speed_factor = 1
+        # The higher the number, the higher the chance of aliens to fire
+        self.alien_aggressiveness = 3
 
         # 1 = right ; -1 = left
         self.fleet_direction = 1
@@ -50,5 +55,6 @@ class Settings():
         self.ship_speed_factor *= self.speedup_scale
         self.bullet_speed_factor *= self.speedup_scale
         self.alien_speed_factor *= self.speedup_scale
+        self.alien_aggressiveness *= self.aggressiveness_scale
 
         self.alien_points = int(self.alien_points * self.score_scale)

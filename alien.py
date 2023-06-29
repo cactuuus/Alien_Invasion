@@ -1,5 +1,7 @@
 import pygame
+import random
 from pygame.sprite import Sprite
+from alien_bullet import AlienBullet
 
 class Alien(Sprite):
     """A class to represent a single alien in the fleet."""
@@ -38,3 +40,10 @@ class Alien(Sprite):
         self.x += (self.settings.alien_speed_factor *
                    self.settings.fleet_direction)
         self.rect.x = self.x
+
+    def try_shooting(self) -> AlienBullet:
+        """Attempt at firing a bullet."""
+        if random.randrange(10000)  <= self.settings.alien_aggressiveness:
+            return AlienBullet(self.settings, self.screen, self)
+        else:
+            return None

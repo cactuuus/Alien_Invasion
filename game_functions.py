@@ -21,13 +21,15 @@ def check_keydown_events(event, settings, screen, stats, sb, ship, aliens,
     #     ship.moving_down = True
 
     if event.key == pygame.K_SPACE:
-        fire_bullet(settings, screen, ship, bullets)
+        if stats.game_active:
+            fire_bullet(settings, screen, ship, bullets)
+        else:
+            # Starts the game if not active
+            start_game(settings, screen, stats, sb, ship, aliens, bullets)
+    
     # Exits the game if 'q' is pressed.
     if event.key == pygame.K_q:
         exit_game(settings, stats)
-    # Starts the ganme if 'p' is pressed.
-    if event.key == pygame.K_p:
-        start_game(settings, screen, stats, sb, ship, aliens, bullets)
 
 
 def check_keyup_events(event, ship):
@@ -98,13 +100,15 @@ def start_game(settings, screen, stats, sb, ship, aliens, bullets):
 
 
 def update_screen(settings, screen, stats, sb, ship, bullets, aliens,
-                  play_button):
+                  play_button, alien_bullets):
     """Updates images on the screen and flips to the new screen."""
     # Redraw the screen during each pass though the loop.
     screen.blit(settings.bg_image, screen.get_rect())
     # Redraw all bullets behind ship and aliens.
     for bullet in bullets.sprites():
         bullet.draw_bullet()
+    for alien_bullet in alien_bullets.sprites():
+        alien_bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
 
@@ -126,15 +130,20 @@ def fire_bullet(settings, screen, ship, bullets):
         bullets.add(new_bullet)
 
 
-def update_bullets(settings, screen, stats, sb, ship, aliens, bullets):
+def update_bullets(settings, screen, stats, sb, ship, aliens, bullets,
+                   alien_bullets):
     """Updates position of bullets and gets rid of old bullets."""
     # Updates bullet position.
     bullets.update()
-    
+    alien_bullets.update()
+
     # Gets rid of bullets that have disappeared.
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+    for alien_bullet in alien_bullets.copy():
+        if alien_bullet.rect.top >= screen.get_height():
+            alien_bullets.remove(alien_bullet)
     
     check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens,
                                   bullets)
@@ -151,16 +160,21 @@ def check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens,
             sb.prep_score()
 
     if len(aliens) == 0:
-        # Starts a new level if the whole fleet is destroyed.
-        bullets.empty()
-        settings.increase_speed()
+        start_new_level(settings, stats, screen, sb, ship, aliens, bullets)
 
-        #Increases level.
-        stats.level += 1
-        sb.prep_level()
 
-        create_fleet(settings, screen, ship, aliens)
-        sleep(0.3)
+def start_new_level(settings, stats, screen, sb, ship, aliens, bullets):
+    # Starts a new level if the whole fleet is destroyed.
+    bullets.empty()
+    settings.increase_speed()
+
+    # Increases level.
+    stats.level += 1
+    sb.prep_level()
+
+    create_fleet(settings, screen, ship, aliens)
+    sleep(0.3)
+
 
 
 def get_number_aliens_x(settings, alien_width) -> int:
@@ -173,7 +187,7 @@ def get_number_aliens_x(settings, alien_width) -> int:
 def get_number_rows(settings, ship_height, alien_height):
     """Determine the number of rows of aliens that fit on the screen."""
     available_space_y = (settings.screen_height - 
-                         (4 * alien_height) - ship_height)
+                         (6 * alien_height) - ship_height)
     number_rows = int(available_space_y / (2 * alien_height))
     return number_rows
 
@@ -255,10 +269,17 @@ def check_aliens_bottom(settings, stats, screen, sb, ship, aliens, bullets):
             break
 
     
-def update_aliens(settings, stats, screen, sb, ship, aliens, bullets):
+def update_aliens(settings, stats, screen, sb, ship, aliens, bullets,
+                  alien_bullets):
     """Checks if the fleet is at an edge, then updates the position 
     of all aliens in the fleet."""
     check_fleet_edges(settings, aliens)
+
+    for alien in aliens:
+        alien_bullet = alien.try_shooting()
+        if alien_bullet:
+            alien_bullets.add(alien_bullet)
+
     aliens.update()
 
     # Looks for alien-ship collisions.
