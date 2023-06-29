@@ -24,7 +24,7 @@ def check_keydown_events(event, settings, screen, stats, sb, ship, aliens,
         fire_bullet(settings, screen, ship, bullets)
     # Exits the game if 'q' is pressed.
     if event.key == pygame.K_q:
-        sys.exit()
+        exit_game(settings, stats)
     # Starts the ganme if 'p' is pressed.
     if event.key == pygame.K_p:
         start_game(settings, screen, stats, sb, ship, aliens, bullets)
@@ -47,7 +47,7 @@ def check_events(settings, screen, stats, sb, play_button, ship, aliens,
     """Responds to keypresses and mouse events."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
+            exit_game(settings, stats)
 
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, settings, screen, stats, sb, ship, aliens,
@@ -160,6 +160,7 @@ def check_bullet_alien_collisions(settings, screen, stats, sb, ship, aliens,
         sb.prep_level()
 
         create_fleet(settings, screen, ship, aliens)
+        sleep(0.3)
 
 
 def get_number_aliens_x(settings, alien_width) -> int:
@@ -273,3 +274,13 @@ def check_high_score(stats, sb):
     if stats.score > stats.high_score:
         stats.high_score = stats.score
         sb.prep_high_score()
+
+
+def exit_game(settings, stats):
+    """Saves and exits the game"""
+    # Saves the high score to a 'txt' file.
+    with open(settings.high_score_filename, 'w') as high_score_txt:
+        high_score_txt.write(str(stats.high_score))
+
+    # Exits the game.
+    sys.exit()

@@ -8,8 +8,9 @@ class GameStats():
         self.settings = settings
         self.reset_stats()
 
-        # High score (should never be reset).
+        # Initialises the high score.
         self.high_score = 0
+        self.get_high_score()
 
         # Starts Alien Invasion in an active state.
         self.game_active = False
@@ -19,3 +20,12 @@ class GameStats():
         self.ships_left = self.settings.ship_limit
         self.score = 0
         self.level = 1
+
+    def get_high_score(self):
+        """Retrieves the current high score, if available."""
+        hs_filename = self.settings.high_score_filename
+        try:
+            with open(hs_filename, 'r') as high_score_txt:
+                self.high_score = int(high_score_txt.read())
+        except FileNotFoundError:
+                pass

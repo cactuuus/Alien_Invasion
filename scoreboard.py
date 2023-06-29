@@ -10,25 +10,21 @@ class Scoreboard():
     def __init__(self, settings, screen, stats):
         """Initialises scorekeeping attributes."""
         self.screen = screen
-
         self.screen_rect = screen.get_rect()
         self.settings = settings
         self.stats = stats
 
         # Font settings for scoring information.
         self.text_color = (255, 255, 255)
-        self.font = pygame.font.SysFont(None, 48)
+        self.font = pygame.font.SysFont("couriernew", 24, bold = True)
 
-        # Prepares the initial score image.
-        self.prep_score()
-        self.prep_high_score()
-        self.prep_level()
-        self.prep_ships()
+        # Prepares the scoreboard's images.
+        self.prep_images()
 
     def prep_score(self):
         """Turns the score into a rendered image."""
         rounded_score = round(self.stats.score, -1)
-        score_str = "{:,}".format(rounded_score)
+        score_str = "Score: {:>9,}".format(rounded_score)
         self.score_image = self.font.render(score_str, True, self.text_color)
         
         # Displays the score at the top of the screen.
@@ -46,7 +42,7 @@ class Scoreboard():
     def prep_high_score(self):
         """Turns the high sscore into a rendered image."""
         rounded_high_score = round(self.stats.high_score, -1)
-        high_score_str = "{:,}".format(rounded_high_score)
+        high_score_str = "High Score: {:,}".format(rounded_high_score)
         self.high_score_image = self.font.render(high_score_str, True,
                                             self.text_color)
 
@@ -57,7 +53,7 @@ class Scoreboard():
         
     def prep_level(self):
         """Turns the level into a rendered image."""
-        level_str = f"level:  {self.stats.level}"
+        level_str = "Level: {:>9,}".format(self.stats.level)
         self.level_image = self.font.render(level_str, True,
                                             self.text_color)
 
@@ -74,3 +70,10 @@ class Scoreboard():
             ship.rect.x = 10 + ship_number * ship.rect.width
             ship.rect.y = 10
             self.ships.add(ship)
+
+    def prep_images(self):
+        """Prepares all of the scoreboard's images."""
+        self.prep_score()
+        self.prep_high_score()
+        self.prep_level()
+        self.prep_ships()

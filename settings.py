@@ -6,6 +6,9 @@ class Settings():
 
     def __init__(self):
         """Initialises the game's settings."""
+        # High score file path.
+        self.high_score_filename = "high_score.txt"
+
         # Screen settings
         self.screen_width = 1200
         self.screen_height = 800
@@ -24,7 +27,7 @@ class Settings():
         self.fleet_drop_speed = 10
 
         # How quickly the game speeds up & score per alien increase
-        self.speedup_scale = 1.3
+        self.speedup_scale = 1.1
         self.score_scale = 1.5
 
         # Initialises dynamic settings of the game
@@ -34,7 +37,7 @@ class Settings():
         """Initialises settings and alien points values."""
         self.ship_speed_factor = 1.5
         self.bullet_speed_factor = 2
-        self.alien_speed_factor = 0.5
+        self.alien_speed_factor = 0.7
 
         # 1 = right ; -1 = left
         self.fleet_direction = 1
