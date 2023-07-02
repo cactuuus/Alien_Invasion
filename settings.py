@@ -13,8 +13,8 @@ class Settings():
         self.high_score_filename = "high_score.txt"
 
         # Screen settings
-        self.screen_width = 1200
-        self.screen_height = 800
+        self.screen_width = 1280
+        self.screen_height = 720
         self.bg_image = pygame.image.load("images/background.bmp")
 
         # Ship settings

@@ -14,7 +14,8 @@ class Ship(Sprite):
         self.audio = audio
         
         # Loads the image and gets its rect.
-        self.image = pygame.image.load("images/player_ship.bmp")
+        self.main_sprite =  pygame.image.load("images/player_ship.bmp")
+        self.image = self.main_sprite
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
@@ -33,8 +34,7 @@ class Ship(Sprite):
         self.moving_down = False
 
         # Exploding animation.
-        self.exploding = False
-        self.explosion = []
+        self.explosion_sprites = []
         self.load_explosion_sprites()
 
     def update(self):
@@ -44,12 +44,6 @@ class Ship(Sprite):
             self.center["x"] += self.settings.ship_speed_factor
         if self.moving_left and self.rect.left > 0:
             self.center["x"] -= self.settings.ship_speed_factor
-            
-        # Removed the ability to go up and down
-        # if self.moving_up and self.rect.top > 0:
-        #     self.center["y"] -= self.settings.ship_speed_factor
-        # if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
-        #     self.center["y"] += self.settings.ship_speed_factor
 
         # Update rect object based on the self.center value.
         self.rect.centerx = self.center["x"]
@@ -60,7 +54,8 @@ class Ship(Sprite):
         self.screen.blit(self.image, self.rect)
 
     def center_ship(self):
-        """Centers the ship on the screen."""
+        """Resets the ship's image and centers it to the screen."""
+        self.image = self.main_sprite
         self.center["x"] = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom
         self.center["y"] = self.rect.centery
@@ -69,11 +64,16 @@ class Ship(Sprite):
         """Plays the cannon sound effect."""
         self.audio.play(self.audio.ship_cannon)
 
-    def explode(self):
+    def explode_sound(self):
         """Animation of the ship exploding."""
         self.audio.play(self.audio.ship_hit)
 
     def load_explosion_sprites(self):
-         for frame_no in range(0, 24):
-            self.explosion.append(
-                pygame.image.load(f"images/ship_hit/{frame_no}.png"))
+         frame_no = 0
+         while True:
+            try:
+                self.explosion_sprites.append(
+                    pygame.image.load(f"images/ship_hit/{frame_no}.png"))
+            except FileNotFoundError:
+                break
+            frame_no += 1
