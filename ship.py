@@ -21,7 +21,7 @@ class Ship(Sprite):
 
         # Starts each new ship at the bottom of the screen.
         self.rect.centerx = self.screen_rect.centerx
-        self.rect.bottom = self.screen_rect.bottom
+        self.rect.bottom = self.screen_rect.bottom - 10
 
         # Stores a decimal value for the ship's center.
         self.center = {"x" : float(self.rect.centerx),
@@ -57,16 +57,27 @@ class Ship(Sprite):
         """Resets the ship's image and centers it to the screen."""
         self.image = self.main_sprite
         self.center["x"] = self.screen_rect.centerx
-        self.rect.bottom = self.screen_rect.bottom
-        self.center["y"] = self.rect.centery
     
     def cannon_sound(self):
         """Plays the cannon sound effect."""
         self.audio.play(self.audio.ship_cannon)
 
-    def explode_sound(self):
+    def explode(self):
         """Animation of the ship exploding."""
         self.audio.play(self.audio.ship_hit)
+
+        # Cycle through each frame of the explosion animation and 
+        # updates the screen.        
+        for explosion_sprite in self.explosion_sprites:
+            self.image = explosion_sprite
+            self.screen.blit(self.settings.bg_image, self.screen.get_rect())
+            self.blitme()
+            pygame.display.update(self.rect)
+            self.settings.clock.tick(120)
+            sleep(0.1)
+
+        # Briefly pauses the game.
+        sleep(0.5)
 
     def load_explosion_sprites(self):
          frame_no = 0

@@ -45,7 +45,7 @@ class Settings():
         self.alien_speed_factor = 1.3
         self.alien_bullet_speed_factor = 1
         # The higher the number, the higher the chance of aliens to fire
-        self.alien_aggressiveness = 3
+        self.alien_aggressiveness = 10
 
         # 1 = right ; -1 = left
         self.fleet_direction = 1

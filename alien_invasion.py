@@ -14,7 +14,7 @@ def run_game():
     pygame.init()
     settings = Settings()
     screen = pygame.display.set_mode(
-        (settings.screen_width, settings.screen_height), )
+        (settings.screen_width, settings.screen_height))
     pygame.display.set_caption("Alien Invasion")
 
     # Makes the 'Play' button.
@@ -40,14 +40,14 @@ def run_game():
     # Starts the main loop for the game.
     while True:
         gf.check_events(settings, screen, stats, audio, sb, play_button, ship,
-                        aliens, bullets)
+                        aliens, bullets, alien_bullets)
 
         if stats.game_active:
             ship.update()
             gf.update_bullets(settings, screen, stats, audio, sb, ship, aliens,
-                              bullets, alien_bullets, play_button)
+                              bullets, alien_bullets)
             gf.update_aliens(settings, stats, screen, audio, sb, ship, aliens,
-                             bullets, alien_bullets, play_button)
+                             bullets, alien_bullets)
 
         gf.update_screen(settings, screen, stats, sb, ship, bullets, aliens,
                          play_button, alien_bullets)
