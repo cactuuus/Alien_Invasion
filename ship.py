@@ -76,8 +76,10 @@ class Ship(Sprite):
             self.settings.clock.tick(120)
             sleep(0.1)
 
-        # Briefly pauses the game.
+        # Briefly pauses the game, then clear the event queue from key
+        # presses done during the animation.
         sleep(0.5)
+        pygame.event.clear(pygame.KEYDOWN)
 
     def load_explosion_sprites(self):
          frame_no = 0

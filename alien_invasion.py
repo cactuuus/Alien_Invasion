@@ -10,6 +10,9 @@ from scoreboard import Scoreboard
 from audio import Audio
 
 def run_game():
+    # Sets proper default values for mixer before the pygame.init() call
+    pygame.mixer.pre_init()
+
     # Initialises the game and create a screen object.
     pygame.init()
     settings = Settings()

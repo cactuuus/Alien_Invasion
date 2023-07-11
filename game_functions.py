@@ -276,6 +276,7 @@ def ship_hit(settings, screen, stats, audio, sb, ship, aliens, bullets,
         # Creates a new fleet and centers the ship.
         create_fleet(settings, screen, audio, ship, aliens)
         ship.center_ship()
+        
     else:
         # Updates high score if needed.
         check_high_score(stats, sb)
